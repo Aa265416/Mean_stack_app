@@ -15,7 +15,7 @@ private postSubb!: Subscription;
 constructor(private postService: PostsService ){}
 
 ngOnInit(): void {
-  this.posts = this.postService.getPosts();  
+  this.postService.getPosts();  
   this.postSubb = this.postService.getPostUpdateListner().subscribe((posts: Post[]) => {
     this.posts = posts;
   });
