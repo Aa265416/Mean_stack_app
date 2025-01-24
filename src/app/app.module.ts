@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 import { CreatePostComponent } from './posts/create-post/create-post.component';
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { PostListComponent } from './posts/post-list/post-list.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
     MatInputModule,
@@ -33,7 +35,6 @@ import { PostListComponent } from './posts/post-list/post-list.component';
     MatToolbarModule,
     MatIconModule,
     MatExpansionModule
-    
   ],
   providers: [],
   bootstrap: [AppComponent]
