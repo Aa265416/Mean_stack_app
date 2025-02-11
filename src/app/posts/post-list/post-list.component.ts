@@ -21,6 +21,10 @@ ngOnInit(): void {
   });
 }
 
+onDelete(postId:string | null){
+this.postService.deletePost(postId);
+}
+
 ngOnDestroy(): void {
  this.postSubb.unsubscribe();
 }
