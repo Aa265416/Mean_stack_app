@@ -1,9 +1,15 @@
-<div class="container mx-auto">
-  <div class="row justify-content-center">
+
+<app-header></app-header>
+<main class="mt-3">
+<div class="container">
+  <div class="row">
     <div class="col-md-6">
-      <app-header></app-header>
-      <app-create-post></app-create-post>
-      <app-post-list ></app-post-list>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>
+</main>
+
+
+ 
+
