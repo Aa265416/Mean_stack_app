@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { PostService } from '../posts.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../post.model';
@@ -12,7 +12,9 @@ import { Post } from '../post.model';
 export class PostCreateComponent implements OnInit {
   enteredTitle='';
   enteredValue='';
-  public post!: Post;
+  isLoading = false;
+  form!: FormGroup;
+  public post: Post | null = null;
   
  
   private postId: string | null = null;
@@ -21,18 +23,27 @@ export class PostCreateComponent implements OnInit {
   constructor(public postService: PostService, public route: ActivatedRoute){}
 
   ngOnInit(): void {
+    this.form = new FormGroup({
+      title: new FormControl(null, { validators: [Validators.required, Validators.minLength(10)] }),
+      content: new FormControl(null, { validators: [Validators.required] })
+    });
    this.route.paramMap.subscribe((paramMap: ParamMap) => {
     if(paramMap.has('postId')){
       this.mode = 'edit';
       this.postId = paramMap.get('postId');
-      const fetchedPost = this.postService.getPostById(this.postId);
-      if (fetchedPost) {
+      this.isLoading = true;
+      this.postService.getPostById(this.postId).subscribe(postData => {
+        this.isLoading = false;
         this.post = {
-          id: fetchedPost.id || '',
-          title: fetchedPost.title || '',
-          content: fetchedPost.content || ''
+          id: postData._id,
+          title: postData.title,
+          content: postData.content
         };
-      }
+        this.form.setValue({
+          title: this.post.title,
+          content: this.post.content
+        });
+      });
       console.log('Fetched post:', this.post);
     } else {
       this.mode = 'create';
@@ -42,21 +53,26 @@ export class PostCreateComponent implements OnInit {
    })
   }
 
-  onSavePost(form: NgForm){
-    if(form.invalid){
+  onImagePicked(event: Event) {
+    
+  }
+
+  onSavePost(){
+    if(this.form.invalid){
       return;
     }
   // const post: Post = {
   //   title: form.value.title,
   //   content: form.value.content
   //  }
+  this.isLoading = true;
   if(this.mode === 'create'){
-    this.postService.addPost(form.value.title, form.value.content);
+    this.postService.addPost(this.form.value.title, this.form.value.content);
   } else {
     if (this.postId) {
-      this.postService.updatePost(this.postId, form.value.title, form.value.content);
+      this.postService.updatePost(this.postId, this.form.value.title, this.form.value.content);
     }
   }
-   form.resetForm();
+   this.form.reset();
   }
 }
