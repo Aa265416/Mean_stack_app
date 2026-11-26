@@ -1,5 +1,5 @@
-export interface Post {
+export interface Post{
     id:string | null,
-    title:string,
-    content:string
+    title: string;
+    content: string;
 }
